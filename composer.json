@@ -1,0 +1,7 @@
+{
+    "name": "noleggio/noleggio-php",
+    "description": "Sistema di gestione noleggio auto in PHP",
+    "require": {
+        "dompdf/dompdf": "^3.1"
+    }
+}

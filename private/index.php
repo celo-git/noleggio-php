@@ -1,5 +1,16 @@
 <?php
 session_start();
+
+// Timeout di 5 minuti (300 secondi)
+$timeout = 300;
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
+    session_unset();
+    session_destroy();
+    header('Location: ../public/accesso.php?timeout=1');
+    exit;
+}
+$_SESSION['last_activity'] = time();
+
 if (!isset($_SESSION['utente_id'])) {
     header('Location: ../public/accesso.php');
     exit;

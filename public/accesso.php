@@ -20,9 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<?php
-echo password_hash('admin123', PASSWORD_DEFAULT);
-?>
+//<?php echo password_hash('admin123', PASSWORD_DEFAULT); ?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -47,5 +45,16 @@ echo password_hash('admin123', PASSWORD_DEFAULT);
         <button type="submit" class="btn btn-primary">Accedi</button>
     </form>
 </div>
+<?php if (isset($_GET['timeout'])): ?>
+<script>
+    // Se la pagina è stata aperta da una finestra popup, chiudi la finestra
+    if (window.opener) {
+        window.close();
+    } else {
+        // Altrimenti, effettua un redirect alla pagina di accesso
+        window.location.href = "accesso.php";
+    }
+</script>
+<?php endif; ?>
 </body>
 </html>

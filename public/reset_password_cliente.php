@@ -1,39 +1,64 @@
+
 <?php
-// Pagina per il reset della password cliente
+// Pagina per invio email di reset password cliente
 require_once __DIR__ . '/../src/bootstrap.php';
 $messaggio = '';
 $successo = false;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require __DIR__ . '/../vendor/autoload.php'; // Assicurati di aver installato PHPMailer con Composer
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
-    $nuova_password = $_POST['nuova_password'] ?? '';
-    $nuova_password2 = $_POST['nuova_password2'] ?? '';
-    // Controllo password: almeno una minuscola, una maiuscola, un numero e un carattere speciale
-    $password_valid = (
-        strlen($nuova_password) >= 8 &&
-        preg_match('/[a-z]/', $nuova_password) &&
-        preg_match('/[A-Z]/', $nuova_password) &&
-        preg_match('/[0-9]/', $nuova_password) &&
-        preg_match('/[^a-zA-Z0-9]/', $nuova_password)
-    );
-    if ($email && $nuova_password && $nuova_password2 && $password_valid && $nuova_password === $nuova_password2) {
+    if ($email) {
         $stmt = $pdo->prepare('SELECT id FROM cliente WHERE email = ? LIMIT 1');
         $stmt->execute([$email]);
         $cliente_id = $stmt->fetchColumn();
         if ($cliente_id) {
-            $password_hash = password_hash($nuova_password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare('UPDATE cliente SET password = ? WHERE id = ?');
-            $stmt->execute([$password_hash, $cliente_id]);
+            // Genera token sicuro
+            $token = bin2hex(random_bytes(32));
+            $expires = date('Y-m-d H:i:s', time() + 3600); // valido 1 ora
+
+            // Salva token e scadenza nel database (aggiungi i campi se non esistono)
+            $stmt = $pdo->prepare('UPDATE cliente SET reset_token = ?, reset_expires = ? WHERE id = ?');
+            $stmt->execute([$token, $expires, $cliente_id]);
+
+            // Prepara email
+            $link = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/conferma_reset_password_cliente.php?token=' . $token;
+            $subject = 'Reset password noleggio';
+            $body = "Clicca sul link per reimpostare la tua password:\n$link\nIl link scade tra 1 ora.";
+
+            // Invia email (usa mail() o una libreria, qui esempio base)
+$mail = new PHPMailer(true);
+try {
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com'; // SMTP server
+    $mail->SMTPAuth = true;
+    $mail->Username = 'mattemartivince@gmail.com'; // tua email
+    $mail->Password = 'ZioGigi72..'; // tua password o app password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
+
+    $mail->setFrom('mattemartivince@gmail.com', 'Noleggio');
+    $mail->addAddress($email);
+    $mail->Subject = $subject;
+    $mail->Body = $body;
+
+    $mail->send();
+    $successo = true;
+    $messaggio = 'Ti abbiamo inviato una email con il link per reimpostare la password.';
+} catch (Exception $e) {
+    $messaggio = 'Errore invio email: ' . $mail->ErrorInfo;
+}
+
             $successo = true;
-            $messaggio = 'Password aggiornata con successo. Ora puoi accedere.';
+            $messaggio = 'Ti abbiamo inviato una email con il link per reimpostare la password.';
         } else {
             $messaggio = 'Email non trovata.';
         }
     } else {
-        if ($nuova_password !== $nuova_password2) {
-            $messaggio = 'Le password non coincidono.';
-        } else {
-            $messaggio = 'Compila tutti i campi e scegli una password valida.';
-        }
+        $messaggio = 'Inserisci la tua email.';
     }
 }
 ?>
@@ -62,11 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form method="post">
         <label for="email">Email registrata</label>
         <input type="email" id="email" name="email" required>
-        <label for="nuova_password">Nuova Password</label>
-        <input type="password" id="nuova_password" name="nuova_password" required minlength="8" placeholder="Almeno 8 caratteri, 1 maiuscola, 1 minuscola, 1 numero, 1 speciale">
-        <label for="nuova_password2">Ripeti Nuova Password</label>
-        <input type="password" id="nuova_password2" name="nuova_password2" required minlength="8" placeholder="Ripeti la password">
-        <button type="submit">Reset Password</button>
+        <button type="submit">Invia link di reset</button>
     </form>
     <div style="margin-top:1em;font-size:0.95em;">
         <a href="accesso_cliente.php">Torna all'accesso</a>
@@ -74,3 +95,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 </body>
 </html>
+

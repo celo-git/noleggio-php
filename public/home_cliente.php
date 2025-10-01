@@ -101,6 +101,7 @@ try {
         <div class="text-center mb-4">
             <a href="accesso_cliente.php" class="btn btn-success btn-lg shadow">Accedi alla tua area riservata</a>
         </div>
+        
         <!-- Carosello Immagini -->
         <div id="carouselTurismo" class="carousel slide mb-5" data-bs-ride="carousel">
             <div class="carousel-inner">

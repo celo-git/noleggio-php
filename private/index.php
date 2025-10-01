@@ -1,4 +1,22 @@
 <?php
+session_start();
+if (!isset($_SESSION['utente_id'])) {
+    header('Location: ../public/accesso.php');
+    exit;
+}
+?>
+
+<a href="?logout=1" class="btn btn-danger float-end">Logout</a>
+<?php
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header('Location: ../public/home_cliente.php');
+    exit;
+}
+?>
+
+<?php
 // Entry point for the car rental system
 require_once __DIR__ . '/../src/bootstrap.php';
 ?><!DOCTYPE html>

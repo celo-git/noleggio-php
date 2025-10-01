@@ -99,9 +99,8 @@ try {
     <div class="container py-4">
         <h1 class="mb-4 text-center">Benvenuto nella tua area clienti</h1>
         <div class="text-center mb-4">
-            <a href="accesso_cliente.php" class="btn btn-success btn-lg shadow">Accedi alla tua area riservata</a>
+            <a href="accesso_cliente.php" class="btn btn-success btn-lg shadow">Accedi alla tua area</a>
         </div>
-        
         <!-- Carosello Immagini -->
         <div id="carouselTurismo" class="carousel slide mb-5" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -161,6 +160,11 @@ try {
             </div>
         </div>
     </div>
+<div style="text-align:right; margin: 2em 0;">
+    <a href="accesso.php" class="btn btn-success" style="font-size:1.2em; padding:0.7em 2em; border-radius:8px;">
+        Area privata
+    </a>
+</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

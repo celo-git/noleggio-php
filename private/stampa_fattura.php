@@ -1,4 +1,11 @@
 <?php
+session_start();
+if (!isset($_SESSION['utente_id'])) {
+    header('Location: ../public/accesso.php');
+    exit;
+}
+?>
+<?php
 // Genera un PDF della fattura
 require_once __DIR__ . '/../src/bootstrap.php';
 require_once __DIR__ . '/../vendor/autoload.php'; // Assumendo che dompdf sia installato via composer

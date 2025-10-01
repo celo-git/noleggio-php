@@ -5,7 +5,7 @@ if (!isset($_SESSION['utente_id'])) {
     exit;
 }
 ?>
-
+// esempio da inserire in una pagina privata
 <a href="?logout=1" class="btn btn-danger float-end">Logout</a>
 <?php
 if (isset($_GET['logout'])) {

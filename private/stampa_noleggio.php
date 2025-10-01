@@ -1,4 +1,11 @@
 <?php
+session_start();
+if (!isset($_SESSION['utente_id'])) {
+    header('Location: ../public/accesso.php');
+    exit;
+}
+?>
+<?php
 // stampa_noleggio.php: genera PDF per un noleggio
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../src/bootstrap.php';

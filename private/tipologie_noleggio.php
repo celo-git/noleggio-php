@@ -1,4 +1,11 @@
 <?php
+session_start();
+if (!isset($_SESSION['utente_id'])) {
+    header('Location: ../public/accesso.php');
+    exit;
+}
+?>
+<?php
 // Pagina per la gestione delle tipologie di noleggio
 require_once __DIR__ . '/../src/bootstrap.php';
 

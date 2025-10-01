@@ -20,6 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+<?php
+echo password_hash('admin123', PASSWORD_DEFAULT);
+?>
 <!DOCTYPE html>
 <html lang="it">
 <head>

@@ -1,4 +1,11 @@
 <?php
+session_start();
+if (!isset($_SESSION['utente_id'])) {
+    header('Location: ../public/accesso.php');
+    exit;
+}
+?>
+<?php
 // API per fornire i noleggi in formato JSON per il calendario
 require_once __DIR__ . '/../src/bootstrap.php';
 header('Content-Type: application/json');

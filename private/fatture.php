@@ -4,7 +4,22 @@ if (!isset($_SESSION['utente_id'])) {
     header('Location: ../public/accesso.php');
     exit;
 }
+// Timeout di 5 minuti (300 secondi)
+$timeout = 300;
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
+    session_unset();
+    session_destroy();
+    header('Location: ../public/accesso.php?timeout=1');
+    exit;
+}
+$_SESSION['last_activity'] = time();
+echo "<script>
+    setTimeout(function() {
+        window.location.href = '../public/accesso.php?timeout=1';
+    }, " . ($timeout * 1000) . ");
+</script>";
 ?>
+
 <?php
 // Pagina elenco tabellare delle fatture
 require_once __DIR__ . '/../src/bootstrap.php';
@@ -62,7 +77,7 @@ $fatture = $stmt->fetchAll();
 </head>
 <body>
 <div class="container">
-    <a href="index.php" class="btn">Torna alla home</a>
+    <a href="gestione.php" class="btn">Torna alla home</a>
     <a href="inserisci_fattura.php" class="btn" style="background:#c0392b;">Nuova Fattura</a>
     <h1>Elenco Fatture</h1>
     <form method="get" style="margin-bottom:2em;display:flex;gap:1em;flex-wrap:wrap;align-items:flex-end;">

@@ -1,5 +1,5 @@
 <?php
-// home_cliente.php - Home page dedicata ai clienti
+// Home page dedicata ai clienti
 // Carosello immagini da public/img_carousel/
 // Sezione notizie a tema turismo
 

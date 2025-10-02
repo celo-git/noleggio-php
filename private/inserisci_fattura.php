@@ -4,7 +4,22 @@ if (!isset($_SESSION['utente_id'])) {
     header('Location: ../public/accesso.php');
     exit;
 }
+// Timeout di 5 minuti (300 secondi)
+$timeout = 300;
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
+    session_unset();
+    session_destroy();
+    header('Location: ../public/accesso.php?timeout=1');
+    exit;
+}
+$_SESSION['last_activity'] = time();
+echo "<script>
+    setTimeout(function() {
+        window.location.href = '../public/accesso.php?timeout=1';
+    }, " . ($timeout * 1000) . ");
+</script>";
 ?>
+
 <?php
 // Pagina per inserire una nuova fattura legata a un noleggio
 require_once __DIR__ . '/../src/bootstrap.php';
@@ -54,7 +69,7 @@ if (isset($_POST['noleggio_id'], $_POST['numero'], $_POST['data'], $_POST['impor
 </head>
 <body>
 <div class="container">
-    <a href="index.php">Torna alla home</a>
+    <a href="gestione.php">Torna alla home</a>
     <h1>Inserisci Fattura</h1>
     <?php if ($messaggio): ?><div class="msg"><?= $messaggio ?></div><?php endif; ?>
     <?php

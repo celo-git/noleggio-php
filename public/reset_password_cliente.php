@@ -23,7 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Salva token e scadenza nel database (aggiungi i campi se non esistono)
             $stmt = $pdo->prepare('UPDATE cliente SET reset_token = ?, reset_expires = ? WHERE id = ?');
             $stmt->execute([$token, $expires, $cliente_id]);
-
+//Se usi Gmail, non puoi usare la password normale. Devi generare una "password per app" dalle impostazioni di sicurezza di Google.
+//Vai su Google Account > Sicurezza > Password per le app e crea una password per l’applicazione.
             // Prepara email
             $link = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/conferma_reset_password_cliente.php?token=' . $token;
             $subject = 'Reset password noleggio';
@@ -36,7 +37,7 @@ try {
     $mail->Host = 'smtp.gmail.com'; // SMTP server
     $mail->SMTPAuth = true;
     $mail->Username = 'mattemartivince@gmail.com'; // tua email
-    $mail->Password = 'ZioGigi72..'; // tua password o app password
+    $mail->Password = 'ofxnyhagbbfmkxfu'; // tua password o app password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 

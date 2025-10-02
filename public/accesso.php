@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($utente && password_verify($password, $utente['password'])) {
         $_SESSION['utente_id'] = $utente['id'];
-        header('Location: ../private/index.php');
+        header('Location: ../private/gestione.php');
         exit;
     } else {
         $errore = 'Credenziali non valide';

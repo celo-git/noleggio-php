@@ -1,6 +1,9 @@
 <?php
 session_start();
-
+if (!isset($_SESSION['utente_id'])) {
+    header('Location: ../public/accesso.php');
+    exit;
+}
 // Timeout di 5 minuti (300 secondi)
 $timeout = 300;
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
@@ -10,13 +13,15 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
     exit;
 }
 $_SESSION['last_activity'] = time();
-
-if (!isset($_SESSION['utente_id'])) {
-    header('Location: ../public/accesso.php');
-    exit;
-}
+echo "<script>
+    setTimeout(function() {
+        window.location.href = '../public/accesso.php?timeout=1';
+    }, " . ($timeout * 1000) . ");
+</script>";
 ?>
-<a href="?logout=1" class="btn btn-danger float-end" style="background:#b71c1c;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Logout</a>
+
+<a href="?logout=1" class="btn btn-danger float-end" 
+style="background:#b71c1c;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Logout</a>
 <?php
 if (isset($_GET['logout'])) {
     session_unset();
@@ -28,8 +33,8 @@ if (isset($_GET['logout'])) {
 <?php
 // Entry point for the car rental system
 require_once __DIR__ . '/../src/bootstrap.php';
-?><!DOCTYPE html>
-</a><a href="tipologie_noleggio.php" style="background:#27ae60;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Tipologie</a>
+?><!DOCTYPE html></a>
+	<a href="tipologie_noleggio.php" style="background:#27ae60;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Tipologie</a>
 	<a href="automezzi.php" style="background:#2980b9;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Automezzi</a>
 	<a href="autisti.php" style="background:#8e44ad;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Autisti</a>
 	<a href="clienti.php" style="background:#16a085;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Clienti</a>

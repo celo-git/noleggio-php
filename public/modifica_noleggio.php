@@ -3,11 +3,16 @@
 require_once __DIR__ . '/../src/bootstrap.php';
 session_start();
 
+if (!isset($_SESSION['cliente_id'])) {
+    header('Location: index.php');
+    exit;
+}
+
 // Gestione logout
 if (isset($_GET['logout'])) {
     session_unset();
     session_destroy();
-    header('Location: home_cliente.php');
+    header('Location: index.php');
     exit;
 }
 
@@ -27,7 +32,7 @@ $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
 $azione = isset($_GET['azione']) && $_GET['azione'] === 'nuovo';
 $noleggio = null;
 if ($id) {
-        header('Location: home_cliente.php');
+        header('Location: index.php');
         exit;
     }
 

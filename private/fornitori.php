@@ -4,7 +4,22 @@ if (!isset($_SESSION['utente_id'])) {
     header('Location: ../public/accesso.php');
     exit;
 }
+// Timeout di 5 minuti (300 secondi)
+$timeout = 300;
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
+    session_unset();
+    session_destroy();
+    header('Location: ../public/accesso.php?timeout=1');
+    exit;
+}
+$_SESSION['last_activity'] = time();
+echo "<script>
+    setTimeout(function() {
+        window.location.href = '../public/accesso.php?timeout=1';
+    }, " . ($timeout * 1000) . ");
+</script>";
 ?>
+
 <?php
 require_once __DIR__ . '/../src/bootstrap.php';
 
@@ -41,7 +56,7 @@ $fornitori = $pdo->query('SELECT * FROM fornitore ORDER BY cognome, nome')->fetc
 </head>
 <body>
     <div style="margin-bottom:2em;">
-        <a href="index.php" style="background:#2980b9;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;font-weight:bold;">Torna alla home</a>
+        <a href="gestione.php" style="background:#2980b9;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;font-weight:bold;">Torna alla home</a>
     </div>
     <h1>Fornitori</h1>
     <div class="form-box">

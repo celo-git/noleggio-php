@@ -16,8 +16,7 @@ if (!isset($_SESSION['utente_id'])) {
     exit;
 }
 ?>
-// esempio da inserire in una pagina privata
-<a href="?logout=1" class="btn btn-danger float-end">Logout</a>
+<a href="?logout=1" class="btn btn-danger float-end" style="background:#b71c1c;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Logout</a>
 <?php
 if (isset($_GET['logout'])) {
     session_unset();
@@ -26,7 +25,6 @@ if (isset($_GET['logout'])) {
     exit;
 }
 ?>
-
 <?php
 // Entry point for the car rental system
 require_once __DIR__ . '/../src/bootstrap.php';
@@ -37,7 +35,7 @@ require_once __DIR__ . '/../src/bootstrap.php';
 	<a href="clienti.php" style="background:#16a085;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Clienti</a>
 	<a href="fornitori.php" style="background:#34495e;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Fornitori</a>
 	<a href="inserisci_noleggio.php" style="background:#e67e22;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Noleggio</a>
-		<a href="fatture.php" style="background:#b71c1c;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Elenco Fatture</a>
+	<a href="fatture.php" style="background:#b71c1c;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-decoration:none;">Elenco Fatture</a>
 </div>
 <html lang="it">
 <head>

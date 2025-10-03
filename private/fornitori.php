@@ -38,6 +38,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+
+//modifica
+$edit_id = null;
+$edit_data = [
+    'nome' => '', 'cognome' => '', 'telefono' => '', 'email' => '', 'indirizzo' => '', 'note' => '' 
+];
+if (isset($_GET['modifica'])) {
+    $edit_id = (int)$_GET['modifica'];
+    $stmt = $pdo->prepare('SELECT nome, cognome, telefono, email, indirizzo, note FROM fornitore WHERE id = ?');
+    $stmt->execute([$edit_id]);
+    $row = $stmt->fetch();
+    if ($row) {
+        $edit_data = $row;
+    } else {
+        $edit_id = null;
+    }
+}
+if (isset($_POST['edit_id'])) {
+    $id = (int)$_POST['edit_id'];
+    $fields = ['nome','cognome','telefono','email','indirizzo','note'];
+    $values = [];
+    foreach ($fields as $f) {
+        $values[$f] = isset($_POST[$f]) ? trim($_POST[$f]) : '';
+    }
+    if ($values['nome'] && $values['cognome']) {
+        $stmt = $pdo->prepare('UPDATE fornitore SET nome=?, cognome=?, telefono=?, email=?, indirizzo=?, note=? WHERE id=?');
+        $stmt->execute([
+            $values['nome'], $values['cognome'], $values['telefono'], $values['email'], $values['indirizzo'], $values['note'] , $id
+        ]);
+    }
+    header('Location: fornitori.php');
+    exit;
+}
+
+
+
 // Recupera tutti i fornitori
 $fornitori = $pdo->query('SELECT * FROM fornitore ORDER BY cognome, nome')->fetchAll();
 ?>
@@ -111,7 +147,7 @@ $fornitori = $pdo->query('SELECT * FROM fornitore ORDER BY cognome, nome')->fetc
                 <td><?= htmlspecialchars($f['email']) ?></td>
                 <td><?= htmlspecialchars($f['indirizzo']) ?></td>
                 <td><?= htmlspecialchars($f['note']) ?></td>
-                <td><a href="modifica_fornitore.php?id=<?= $f['id'] ?>">Modifica</a></td>
+                <td><a href="fornitori.php?id=<?= $f['id'] ?>">Modifica</a></td>
             </tr>
             <?php endforeach; ?>
         </tbody>

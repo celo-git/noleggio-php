@@ -24,7 +24,6 @@ echo "<script>
 // Pagina per inserire un nuovo noleggio
 
 require_once __DIR__ . '/../src/bootstrap.php';
-session_start();
 
 // Gestione eliminazione noleggio
 if (isset($_GET['delete'])) {
@@ -34,9 +33,6 @@ if (isset($_GET['delete'])) {
     header('Location: inserisci_noleggio.php?deleted=1');
     exit;
 }
-//tolte a mano le righe
-//require_once __DIR__ . '/../src/bootstrap.php';
-//session_start();
 
 // Recupera clienti solo se non filtrato
 $clienti = [];
@@ -46,7 +42,6 @@ if (!isset($_SESSION['cliente_id'])) {
 
 // Recupera tipologie noleggio
 $tipologie = $pdo->query('SELECT id, nome FROM tipologie_noleggio ORDER BY nome')->fetchAll();
-
 
 // Recupera automezzi disponibili
 $automezzi = $pdo->query('SELECT id, marca, modello, targa FROM automezzo WHERE stato = 1 ORDER BY marca, modello')->fetchAll();

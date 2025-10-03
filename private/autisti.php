@@ -20,7 +20,6 @@ echo "<script>
 </script>";
 ?>
 
-
 <?php
 // Pagina per la gestione degli autisti
 require_once __DIR__ . '/../src/bootstrap.php';

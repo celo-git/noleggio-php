@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7cc2f723f3611cecf08b4deeaaaf5031",
+    "content-hash": "4a46ccd3e9e6a12fbce4c329258e9971",
     "packages": [
         {
             "name": "dompdf/dompdf",
@@ -162,6 +162,70 @@
             "time": "2024-04-29T13:26:35+00:00"
         },
         {
+            "name": "maikuolan/common",
+            "version": "v2.14.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Maikuolan/Common.git",
+                "reference": "42c430a902eb34ac4a18d6e33030a6f3d0fbdc85"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Maikuolan/Common/zipball/42c430a902eb34ac4a18d6e33030a6f3d0fbdc85",
+                "reference": "42c430a902eb34ac4a18d6e33030a6f3d0fbdc85",
+                "shasum": ""
+            },
+            "require": {
+                "ext-iconv": "*",
+                "ext-pcre": "*",
+                "php": ">=7.2.0"
+            },
+            "suggest": {
+                "ext-apcu": ">=4",
+                "ext-curl": "*",
+                "php": ">=8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Maikuolan\\Common\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Common classes package. Contains some common classes written for CIDRAM, phpMussel, etc, available for additional use elsewhere via this package.",
+            "keywords": [
+                "classes",
+                "common",
+                "l10n",
+                "php",
+                "yaml"
+            ],
+            "support": {
+                "docs": "https://github.com/Maikuolan/Common/tree/v2/_docs",
+                "issues": "https://github.com/Maikuolan/Common/issues",
+                "rss": "https://github.com/Maikuolan/Common/releases.atom",
+                "source": "https://github.com/Maikuolan/Common"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/maikuolan",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://ko-fi.com/maikuolan",
+                    "type": "ko_fi"
+                },
+                {
+                    "url": "https://liberapay.com/Maikuolan",
+                    "type": "liberapay"
+                }
+            ],
+            "time": "2025-08-12T10:24:49+00:00"
+        },
+        {
             "name": "masterminds/html5",
             "version": "2.10.0",
             "source": {
@@ -227,6 +291,57 @@
                 "source": "https://github.com/Masterminds/html5-php/tree/2.10.0"
             },
             "time": "2025-07-25T09:04:22+00:00"
+        },
+        {
+            "name": "phpmailer/dkimvalidator",
+            "version": "v0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPMailer/DKIMValidator.git",
+                "reference": "49b65b1c0e022afdbac7afa89c997d74606fc881"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPMailer/DKIMValidator/zipball/49b65b1c0e022afdbac7afa89c997d74606fc881",
+                "reference": "49b65b1c0e022afdbac7afa89c997d74606fc881",
+                "shasum": ""
+            },
+            "require": {
+                "ext-hash": "*",
+                "ext-mbstring": "*",
+                "ext-openssl": "*",
+                "php": ">=7.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PHPMailer\\DKIMValidator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "angrychimp",
+                    "email": "rk@angrychimp.net"
+                },
+                {
+                    "name": "Teon d.o.o. - Bostjan Skufca",
+                    "email": "bostjan@teon.si"
+                },
+                {
+                    "name": "Marcus Bointon",
+                    "email": "phpmailer@synchromedia.co.uk"
+                }
+            ],
+            "description": "A DKIM signature validator in PHP.",
+            "support": {
+                "issues": "https://github.com/PHPMailer/DKIMValidator/issues",
+                "source": "https://github.com/PHPMailer/DKIMValidator/tree/v0.3"
+            },
+            "time": "2019-10-10T17:19:06+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -309,6 +424,138 @@
                 }
             ],
             "time": "2025-09-30T11:54:53+00:00"
+        },
+        {
+            "name": "phpmussel/core",
+            "version": "v3.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpMussel/Core.git",
+                "reference": "bc3e94abbe11c3f0b7a7f488db3bd03ddf4f9e37"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpMussel/Core/zipball/bc3e94abbe11c3f0b7a7f488db3bd03ddf4f9e37",
+                "reference": "bc3e94abbe11c3f0b7a7f488db3bd03ddf4f9e37",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcre": "*",
+                "maikuolan/common": "^2.14",
+                "php": ">=7.2.0"
+            },
+            "suggest": {
+                "ext-apcu": ">=4",
+                "ext-bz2": "*",
+                "ext-curl": "*",
+                "ext-lzf": "*",
+                "ext-rar": "*",
+                "ext-zip": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpMussel\\Core\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "phpMussel core",
+            "homepage": "https://phpmussel.github.io/",
+            "keywords": [
+                "anti-exploit",
+                "anti-malware",
+                "anti-spam",
+                "anti-trojan",
+                "anti-virus",
+                "antivirus",
+                "protection",
+                "security",
+                "uploads"
+            ],
+            "support": {
+                "docs": "https://github.com/phpMussel/Docs",
+                "issues": "https://github.com/phpMussel/Core/issues",
+                "rss": "https://github.com/phpMussel/Core/releases.atom",
+                "source": "https://github.com/phpMussel/Core"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/maikuolan",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://ko-fi.com/maikuolan",
+                    "type": "ko_fi"
+                },
+                {
+                    "url": "https://liberapay.com/Maikuolan",
+                    "type": "liberapay"
+                }
+            ],
+            "time": "2025-07-26T18:13:29+00:00"
+        },
+        {
+            "name": "phpmussel/phpmailer",
+            "version": "v3.1.14",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpMussel/Plugin-PHPMailer.git",
+                "reference": "c12a627abb633d97fabc3594916f06786aea50c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpMussel/Plugin-PHPMailer/zipball/c12a627abb633d97fabc3594916f06786aea50c0",
+                "reference": "c12a627abb633d97fabc3594916f06786aea50c0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.0",
+                "phpmailer/phpmailer": "^6.5",
+                "phpmussel/core": "^3.4.2"
+            },
+            "replace": {
+                "maikuolan/phpmussel-plugin-notifications": "*"
+            },
+            "suggest": {
+                "phpmussel/frontend": "^3.5.2",
+                "phpmussel/web": "^3.5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpMussel\\PHPMailer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Uses PHPMailer to provide 2FA and email notifications support for phpMussel v3+",
+            "homepage": "https://phpmussel.github.io/",
+            "support": {
+                "docs": "https://github.com/phpMussel/Docs",
+                "issues": "https://github.com/phpMussel/Plugin-PHPMailer/issues",
+                "rss": "https://github.com/phpMussel/Plugin-PHPMailer/releases.atom",
+                "source": "https://github.com/phpMussel/Plugin-PHPMailer"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/maikuolan",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://ko-fi.com/maikuolan",
+                    "type": "ko_fi"
+                },
+                {
+                    "url": "https://liberapay.com/Maikuolan",
+                    "type": "liberapay"
+                }
+            ],
+            "time": "2025-05-17T13:30:41+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",

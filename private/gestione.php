@@ -26,7 +26,7 @@ style="background:#b71c1c;color:#fff;padding:0.7em 1.5em;border-radius:5px;text-
 if (isset($_GET['logout'])) {
     session_unset();
     session_destroy();
-    header('Location: ../public/home_cliente.php');
+    header('Location: ../public/index.php');
     exit;
 }
 ?>

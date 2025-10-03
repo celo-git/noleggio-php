@@ -3,6 +3,8 @@
     "description": "Sistema di gestione noleggio auto in PHP",
     "require": {
         "dompdf/dompdf": "^3.1",
-        "phpmailer/phpmailer": "^6.11"
+        "phpmailer/phpmailer": "^6.11",
+        "phpmailer/dkimvalidator": "^0.3.0",
+        "phpmussel/phpmailer": "^3.1"
     }
 }

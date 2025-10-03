@@ -41,7 +41,7 @@ $edit_data = [
 ];
 if (isset($_GET['modifica'])) {
     $edit_id = (int)$_GET['modifica'];
-    $stmt = $pdo->prepare('SELECT nome, cognome, telefono, email, indirizzo, codice_fiscale, partita_iva, stato FROM cliente WHERE id = ?');
+    $stmt = $pdo->prepare('SELECT nome, cognome, telefono, email, indirizzo, codice_fiscale, partita_iva, stato, privacy_consenso FROM cliente WHERE id = ?');
     $stmt->execute([$edit_id]);
     $row = $stmt->fetch();
     if ($row) {
@@ -145,6 +145,10 @@ $clienti = $pdo->query('SELECT * FROM cliente ORDER BY cognome, nome')->fetchAll
                 <option value="1" <?= (isset($edit_data['stato']) && $edit_id && $edit_data['stato']) ? 'selected' : '' ?>>Attivo</option>
                 <option value="0" <?= (isset($edit_data['stato']) && $edit_id && !$edit_data['stato']) ? 'selected' : '' ?>>Non attivo</option>
             </select></label>
+            <label style="display:flex;flex-direction:column;align-items:flex-start;">consenso privacy: <select name="privacy_consenso">
+                <option value="1" <?= (isset($edit_data['privacy_consenso']) && $edit_id && $edit_data['privacy_consenso']) ? 'selected' : '' ?>>accettato</option>
+                <option value="0" <?= (isset($edit_data['privacy_consenso']) && $edit_id && !$edit_data['privacy_consenso']) ? 'selected' : '' ?>>Non accettato</option>
+            </select></label>
             <button type="submit" style="align-self:flex-end;">
                 <?= $edit_id ? 'Salva modifiche' : 'Aggiungi cliente' ?>
             </button>
@@ -165,6 +169,7 @@ $clienti = $pdo->query('SELECT * FROM cliente ORDER BY cognome, nome')->fetchAll
             <th>Codice Fiscale</th>
             <th>Partita IVA</th>
             <th>Stato</th>
+            <th>consenso privacy</th>
             <th>Azioni</th>
         </tr>
     </thead>
@@ -179,6 +184,7 @@ $clienti = $pdo->query('SELECT * FROM cliente ORDER BY cognome, nome')->fetchAll
             <td><?= htmlspecialchars($c['codice_fiscale']) ?></td>
             <td><?= htmlspecialchars($c['partita_iva']) ?></td>
             <td><?= $c['stato'] ? 'Attivo' : 'Non attivo' ?></td>
+            <td><?= $c['privacy_consenso'] ? 'accettato' : 'Non accettato' ?></td>
             <td>
                 <a href="?modifica=<?= $c['id'] ?>">Modifica</a> |
                 <a href="?elimina=<?= $c['id'] ?>" onclick="return confirm('Eliminare questo cliente?');">Elimina</a>

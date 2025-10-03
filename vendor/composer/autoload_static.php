@@ -7,6 +7,11 @@ namespace Composer\Autoload;
 class ComposerStaticInitce1813ff8c25deed1a8de78fe66e08bb
 {
     public static $prefixLengthsPsr4 = array (
+        'p' => 
+        array (
+            'phpMussel\\PHPMailer\\' => 20,
+            'phpMussel\\Core\\' => 15,
+        ),
         'S' => 
         array (
             'Svg\\' => 4,
@@ -15,10 +20,12 @@ class ComposerStaticInitce1813ff8c25deed1a8de78fe66e08bb
         'P' => 
         array (
             'PHPMailer\\PHPMailer\\' => 20,
+            'PHPMailer\\DKIMValidator\\' => 24,
         ),
         'M' => 
         array (
             'Masterminds\\' => 12,
+            'Maikuolan\\Common\\' => 17,
         ),
         'F' => 
         array (
@@ -31,6 +38,14 @@ class ComposerStaticInitce1813ff8c25deed1a8de78fe66e08bb
     );
 
     public static $prefixDirsPsr4 = array (
+        'phpMussel\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmussel/phpmailer/src',
+        ),
+        'phpMussel\\Core\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmussel/core/src',
+        ),
         'Svg\\' => 
         array (
             0 => __DIR__ . '/..' . '/dompdf/php-svg-lib/src/Svg',
@@ -43,9 +58,17 @@ class ComposerStaticInitce1813ff8c25deed1a8de78fe66e08bb
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
+        'PHPMailer\\DKIMValidator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/dkimvalidator/src',
+        ),
         'Masterminds\\' => 
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
+        ),
+        'Maikuolan\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/maikuolan/common/src',
         ),
         'FontLib\\' => 
         array (

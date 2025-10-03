@@ -6,10 +6,14 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'phpMussel\\PHPMailer\\' => array($vendorDir . '/phpmussel/phpmailer/src'),
+    'phpMussel\\Core\\' => array($vendorDir . '/phpmussel/core/src'),
     'Svg\\' => array($vendorDir . '/dompdf/php-svg-lib/src/Svg'),
     'Sabberworm\\CSS\\' => array($vendorDir . '/sabberworm/php-css-parser/src'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
+    'PHPMailer\\DKIMValidator\\' => array($vendorDir . '/phpmailer/dkimvalidator/src'),
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
+    'Maikuolan\\Common\\' => array($vendorDir . '/maikuolan/common/src'),
     'FontLib\\' => array($vendorDir . '/dompdf/php-font-lib/src/FontLib'),
     'Dompdf\\' => array($vendorDir . '/dompdf/dompdf/src'),
 );

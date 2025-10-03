@@ -63,7 +63,7 @@ if (isset($_POST['edit_id'])) {
             $values['nome'], $values['cognome'], $values['telefono'], $values['email'], $values['indirizzo'], $values['codice_fiscale'], $values['partita_iva'], $values['stato'] ? 1 : 0, $id
         ]);
     }
-    header('Location: fornitore.php');
+    header('Location: fornitori.php');
     exit;
 }
 
@@ -149,7 +149,7 @@ $fornitori = $pdo->query('SELECT * FROM fornitore ORDER BY cognome, nome')->fetc
                 <?= $edit_id ? 'Salva modifiche' : 'Aggiungi fornitore' ?>
             </button>
             <?php if ($edit_id): ?>
-                <a href="fornitorei.php" style="align-self:flex-end;margin-left:1em;">Annulla</a>
+                <a href="fornitori.php" style="align-self:flex-end;margin-left:1em;">Annulla</a>
             <?php endif; ?>
         </div>
     </form>

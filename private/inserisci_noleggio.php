@@ -58,7 +58,7 @@ $edit_data = [
     'cliente_id' => '', 'tipologia_id' => '', 'automezzo_id' => '', 'autista1_id' => '', 'autista2_id' => '', 'data_inizio' => '', 'data_fine' => '', 'importo' => '', 'destinazione' => '', 'accompagnatore' => '', 'preventivo' => 0, 'pagato' => 0, 'ivato' => 0
 ];
 if ($edit_id) {
-    $stmt = $pdo->prepare('SELECT * FROM noleggio WHERE id = ?');
+    $stmt = $pdo->prepare('SELECT * FROM noleggio WHERE id = ? order by data_inizio DESC');
     $stmt->execute([$edit_id]);
     $row = $stmt->fetch();
     if ($row) {

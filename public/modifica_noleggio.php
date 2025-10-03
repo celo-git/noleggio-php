@@ -50,11 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuovo'])) {
         $messaggio = 'Errore: la data di inizio deve essere minore o uguale alla data di fine.';
             }
     elseif ($cliente_id && $tipologia_id && $data_inizio && $data_fine) {
-        $messaggio = '';
         $stmt = $pdo->prepare('INSERT INTO noleggio (cliente_id, tipologia_noleggio_id, data_inizio, data_fine, destinazione, accompagnatore, preventivo) VALUES (?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([$cliente_id, $tipologia_id, $data_inizio, $data_fine, $destinazione, $accompagnatore, $preventivo]);
         $_SESSION['messaggio'] = 'Noleggio inserito con successo.';
-}
+        $messaggio = 'Noleggio inserito con successo.';
+        header('Location: modifica_noleggio.php');
+    }
 }
 
 ?>
@@ -142,37 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuovo'])) {
         <label style="display:flex;align-items:center;gap:0.5em;">
         <button type="submit">Salva</button>
     </form>
-<?php elseif ($id && $noleggio): ?>
-    <?php if ($messaggio): ?><div class="msg"><?= $messaggio ?></div><?php endif; ?>
-    <form method="post">
-        <label for="cliente_id">Cliente</label>
-        <select name="cliente_id" id="cliente_id" required>
-            <option value="">-- Seleziona cliente --</option>
-            <?php foreach ($clienti as $c): ?>
-                <option value="<?= $c['id'] ?>" <?= $noleggio['cliente_id']==$c['id'] ? 'selected' : '' ?>><?= htmlspecialchars($c['cognome'] . ' ' . $c['nome']) ?></option>
-            <?php endforeach; ?>
-        </select>
-        <label for="tipologia_id">Tipologia</label>
-        <select name="tipologia_id" id="tipologia_id" required>
-            <option value="">-- Seleziona tipologia --</option>
-            <?php foreach ($tipologie as $t): ?>
-                <option value="<?= $t['id'] ?>" <?= $noleggio['tipologia_noleggio_id']==$t['id'] ? 'selected' : '' ?>><?= htmlspecialchars($t['nome']) ?></option>
-            <?php endforeach; ?>
-        </select>
-        <label for="data_inizio">Data Inizio</label>
-        <input type="date" name="data_inizio" id="data_inizio" required value="<?= htmlspecialchars($noleggio['data_inizio']) ?>">
-        <label for="data_fine">Data Fine</label>
-        <input type="date" name="data_fine" id="data_fine" required value="<?= htmlspecialchars($noleggio['data_fine']) ?>">
-        <label for="destinazione">Destinazione</label>
-        <input type="text" name="destinazione" id="destinazione" maxlength="255" value="<?= htmlspecialchars($noleggio['destinazione']) ?>">
-        <label for="accompagnatore">Accompagnatore</label>
-        <input type="text" name="accompagnatore" id="accompagnatore" maxlength="100" value="<?= htmlspecialchars($noleggio['accompagnatore']) ?>">
-        <label style="display:flex;align-items:center;gap:0.5em;margin-top:1em;">
-        <input type="checkbox" name="preventivo" value="1" <?= $noleggio['preventivo'] ? 'checked' : '' ?>> Preventivo
-        </label>
-        <label style="display:flex;align-items:center;gap:0.5em;">
-         <button type="submit">Salva Modifiche</button>
-    </form>
+
 <?php endif; ?>
 </div>
 </body>

@@ -15,6 +15,8 @@ if (isset($_GET['logout'])) {
     header('Location: index.php');
     exit;
 }
+// Recupera tutte le tipologie dalla tabella tipologie_noleggio
+$tipologie = $pdo->query('SELECT id, nome FROM tipologie_noleggio ORDER BY nome')->fetchAll();
 
 // Filtra per cliente loggato se presente
 $where = '';
@@ -76,22 +78,10 @@ if ($id) {
         $preventivo = isset($_POST['preventivo']) ? 1 : 0;
         $pagato = isset($_POST['pagato']) ? 1 : 0;
         $ivato = isset($_POST['ivato']) ? 1 : 0;
-        // Verifica che automezzo_id sia valido o nullo
-        $automezzo_valido = true;
-        if ($automezzo_id !== null) {
-            $check = $pdo->prepare('SELECT COUNT(*) FROM automezzo WHERE id = ?');
-            $check->execute([$automezzo_id]);
-            $automezzo_valido = $check->fetchColumn() > 0;
-        }
-    if ($automezzo_valido) {
-        $stmt = $pdo->prepare('INSERT INTO noleggio (cliente_id, tipologia_noleggio_id, automezzo_id, autista1_id, autista2_id, data_inizio, data_fine, importo, destinazione, accompagnatore, preventivo, pagato, ivato) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->execute([$cliente_id, $tipologia_id, $automezzo_id, $autista1_id, $autista2_id, $data_inizio, $data_fine, $importo, $destinazione, $accompagnatore, $preventivo, $pagato, $ivato]);
-        $_SESSION['messaggio'] = 'Inserimento effettuato!';
-        header('Location: modifica_noleggio.php');
-        exit;
-    } else {
-        $messaggio = 'Errore: automezzo selezionato non valido.';
-    }
+        // Controllo date
+        if (strtotime($data_inizio) > strtotime($data_fine)) {
+            $messaggio = 'Errore: la data di inizio deve essere minore o uguale alla data di fine.';
+                }
     }
 ?>
 <!DOCTYPE html>
@@ -121,7 +111,7 @@ if ($id) {
     <div class="d-flex justify-content-end" style="margin-bottom: 1em;">
         <a href="?logout=1" class="btn btn-danger">Logout</a>
     </div>
-    <h1>Modifica Noleggio</h1>
+    <h1>inserisci la tua prenotazione</h1>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </html>
@@ -151,7 +141,11 @@ if ($id) {
         </table>
     </div>
     <?php if ($azione): ?>
-    <?php if ($messaggio): ?><div class="msg"><?= $messaggio ?></div><?php endif; ?>
+ <?php if ($messaggio): ?>
+    <div class="alert alert-danger text-center fw-bold" style="font-size:1.3em;max-width:600px;margin:30px auto 0;box-shadow:0 2px 8px rgba(200,0,0,0.18);border:2px solid #b71c1c;">
+        <?= htmlspecialchars($messaggio) ?>
+    </div>
+<?php endif; ?>
     <form method="post">
         <input type="hidden" name="nuovo_noleggio" value="1">
         <?php if (isset($_SESSION['cliente_id'])): ?>
@@ -177,13 +171,13 @@ if ($id) {
         <label for="data_inizio">Data Inizio</label>
         <input type="date" name="data_inizio" id="data_inizio" required>
         <label for="data_fine">Data Fine</label>
-    <input type="date" name="data_fine" id="data_fine" required>
+        <input type="date" name="data_fine" id="data_fine" required>
         <label for="destinazione">Destinazione</label>
         <input type="text" name="destinazione" id="destinazione" maxlength="255">
         <label for="accompagnatore">Accompagnatore</label>
         <input type="text" name="accompagnatore" id="accompagnatore" maxlength="100">
         <label style="display:flex;align-items:center;gap:0.5em;margin-top:1em;">
-            <input type="checkbox" name="preventivo" value="1"> Preventivo
+        <input type="checkbox" name="preventivo" value="1"> Preventivo
         </label>
         <label style="display:flex;align-items:center;gap:0.5em;">
         <!-- Flag pagato e ivato rimossi -->
@@ -210,13 +204,13 @@ if ($id) {
         <label for="data_inizio">Data Inizio</label>
         <input type="date" name="data_inizio" id="data_inizio" required value="<?= htmlspecialchars($noleggio['data_inizio']) ?>">
         <label for="data_fine">Data Fine</label>
-    <input type="date" name="data_fine" id="data_fine" required value="<?= htmlspecialchars($noleggio['data_fine']) ?>">
+        <input type="date" name="data_fine" id="data_fine" required value="<?= htmlspecialchars($noleggio['data_fine']) ?>">
         <label for="destinazione">Destinazione</label>
         <input type="text" name="destinazione" id="destinazione" maxlength="255" value="<?= htmlspecialchars($noleggio['destinazione']) ?>">
         <label for="accompagnatore">Accompagnatore</label>
         <input type="text" name="accompagnatore" id="accompagnatore" maxlength="100" value="<?= htmlspecialchars($noleggio['accompagnatore']) ?>">
         <label style="display:flex;align-items:center;gap:0.5em;margin-top:1em;">
-            <input type="checkbox" name="preventivo" value="1" <?= $noleggio['preventivo'] ? 'checked' : '' ?>> Preventivo
+        <input type="checkbox" name="preventivo" value="1" <?= $noleggio['preventivo'] ? 'checked' : '' ?>> Preventivo
         </label>
         <label style="display:flex;align-items:center;gap:0.5em;">
         <!-- Flag pagato e ivato rimossi -->

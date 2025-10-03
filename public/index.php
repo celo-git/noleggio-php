@@ -45,7 +45,7 @@ try {
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Home Cliente - Noleggio</title>
+    <title>Home Cliente</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
     <style>
         body { background: #f8f9fa; }
@@ -97,9 +97,9 @@ try {
 </head>
 <body>
     <div class="container py-4">
-        <h1 class="mb-4 text-center">Benvenuto nella tua area clienti</h1>
+        <h1 class="mb-4 text-center">Benvenuto!</h1>
         <div class="text-center mb-4">
-            <a href="accesso_cliente.php" class="btn btn-success btn-lg shadow">Accedi alla tua area</a>
+            <a href="accesso_cliente.php" class="btn btn-success btn-lg shadow">Accedi alla tua area personale</a>
         </div>
         <!-- Carosello Immagini -->
         <div id="carouselTurismo" class="carousel slide mb-5" data-bs-ride="carousel">
@@ -121,7 +121,7 @@ try {
         </div>
         <!-- Sezione Notizie -->
         <div class="notizie">
-            <h2 class="mb-3">Notizie Turismo</h2>
+            <h2 class="mb-3">Notizie dal Mondo</h2>
             <div id="carouselNotizie" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <?php foreach ($notizie as $i => $notizia): ?>

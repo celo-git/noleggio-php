@@ -18,7 +18,7 @@ if (isset($_GET['logout'])) {
 // Recupera tutte le tipologie dalla tabella tipologie_noleggio
 $tipologie = $pdo->query('SELECT id, nome FROM tipologie_noleggio ORDER BY nome')->fetchAll();
 
-// Filtra per cliente loggato se presente
+// Filtra per cliente loggato
 $where = '';
 $params = [];
 if (isset($_SESSION['cliente_id'])) {
@@ -33,56 +33,30 @@ $elenco_noleggi = $stmt->fetchAll();
 $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
 $azione = isset($_GET['azione']) && $_GET['azione'] === 'nuovo';
 $noleggio = null;
-if ($id) {
-        header('Location: index.php');
-        exit;
-    }
+$messaggio = 'inserisci i dati della prenotazione';
 
-    // Filtra per cliente loggato se presente
-    $where = '';
-    $params = [];
-    if (isset($_SESSION['cliente_id'])) {
-        $where = 'WHERE n.cliente_id = ?';
-        $params[] = $_SESSION['cliente_id'];
-    }
-    $sql = 'SELECT n.id, c.cognome AS cliente_cognome, c.nome AS cliente_nome, t.nome AS tipologia, n.data_inizio, n.data_fine, n.destinazione FROM noleggio n LEFT JOIN cliente c ON n.cliente_id = c.id LEFT JOIN tipologie_noleggio t ON n.tipologia_noleggio_id = t.id ' . $where . ' ORDER BY n.data_inizio DESC';
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
-    $elenco_noleggi = $stmt->fetchAll();
 
-    $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
-    $azione = isset($_GET['azione']) && $_GET['azione'] === 'nuovo';
-    $noleggio = null;
-    if ($id) {
-        // Recupera dati noleggio
-        $stmt = $pdo->prepare('SELECT * FROM noleggio WHERE id = ?');
-        $stmt->execute([$id]);
-        $noleggio = $stmt->fetch();
-        if (!$noleggio) {
-            $id = null;
-        }
-    }
+// Gestione inserimento
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuovo'])) {
+    $cliente_id = isset($_SESSION['cliente_id']) ? (int)$_SESSION['cliente_id'] : (int)$_POST['cliente_id'];
+    $tipologia_id = (int)$_POST['tipologia_id'];
+    $data_inizio = $_POST['data_inizio'] ?? '';
+    $data_fine = $_POST['data_fine'] ?? '';
+    $destinazione = (($_POST['destinazione'] ?? '') !== '') ? trim($_POST['destinazione']) : null;
+    $accompagnatore = (($_POST['accompagnatore'] ?? '') !== '') ? trim($_POST['accompagnatore']) : null;
+    $preventivo = isset($_POST['preventivo']) ? 1 : 0;
+    // Controllo date
+    if (strtotime($data_inizio) > strtotime($data_fine)) {
+        $messaggio = 'Errore: la data di inizio deve essere minore o uguale alla data di fine.';
+            }
+    elseif ($cliente_id && $tipologia_id && $data_inizio && $data_fine) {
+        $messaggio = '';
+        $stmt = $pdo->prepare('INSERT INTO noleggio (cliente_id, tipologia_noleggio_id, data_inizio, data_fine, destinazione, accompagnatore, preventivo) VALUES (?, ?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$cliente_id, $tipologia_id, $data_inizio, $data_fine, $destinazione, $accompagnatore, $preventivo]);
+        $_SESSION['messaggio'] = 'Noleggio inserito con successo.';
+}
+}
 
-    // Gestione inserimento nuovo noleggio
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuovo_noleggio'])) {
-        $cliente_id = isset($_SESSION['cliente_id']) ? (int)$_SESSION['cliente_id'] : (int)$_POST['cliente_id'];
-        $tipologia_id = (int)$_POST['tipologia_id'];
-        $automezzo_id = (($_POST['automezzo_id'] ?? '') !== '') ? (int)$_POST['automezzo_id'] : null;
-        $autista1_id = (($_POST['autista1_id'] ?? '') !== '') ? (int)$_POST['autista1_id'] : null;
-        $autista2_id = (($_POST['autista2_id'] ?? '') !== '') ? (int)$_POST['autista2_id'] : null;
-        $data_inizio = $_POST['data_inizio'] ?? '';
-        $data_fine = $_POST['data_fine'] ?? '';
-        $importo = (($_POST['importo'] ?? '') !== '') ? str_replace(',', '.', $_POST['importo']) : null;
-        $destinazione = (($_POST['destinazione'] ?? '') !== '') ? trim($_POST['destinazione']) : null;
-        $accompagnatore = (($_POST['accompagnatore'] ?? '') !== '') ? trim($_POST['accompagnatore']) : null;
-        $preventivo = isset($_POST['preventivo']) ? 1 : 0;
-        $pagato = isset($_POST['pagato']) ? 1 : 0;
-        $ivato = isset($_POST['ivato']) ? 1 : 0;
-        // Controllo date
-        if (strtotime($data_inizio) > strtotime($data_fine)) {
-            $messaggio = 'Errore: la data di inizio deve essere minore o uguale alla data di fine.';
-                }
-    }
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -113,53 +87,41 @@ if ($id) {
     </div>
     <h1>inserisci la tua prenotazione</h1>
 </body>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </html>
-    <div style="margin-bottom:2em;">
+<!-- popolo l'elenco -->
+<div style="margin-bottom:2em;">
     <a href="modifica_noleggio.php?azione=nuovo" style="background:#27ae60;color:#fff;padding:0.4em 1em;border-radius:5px;text-decoration:none;font-size:0.95em;">Inserisci nuovo noleggio</a>
-        <table style="width:100%;border-collapse:collapse;background:#fff;">
-            <thead>
-                <tr style="background:#eee;">
-                    <!-- <th>ID</th> -->
-                    <!-- <th>Cliente</th> -->
-                        <th>Tipologia</th>
-                        <th>Periodo</th>
-                        <th>Destinazione</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($elenco_noleggi as $n): ?>
-                <tr>
-                        <!-- <td><?= $n['id'] ?></td> -->
-                        <!-- <td><?= htmlspecialchars($n['cliente_cognome'] . ' ' . $n['cliente_nome']) ?></td> -->
-                        <td><?= htmlspecialchars($n['tipologia']) ?></td>
-                        <td><?= htmlspecialchars($n['data_inizio']) ?> - <?= htmlspecialchars($n['data_fine']) ?></td>
-                        <td><?= htmlspecialchars($n['destinazione'] ?? '') ?></td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-    <?php if ($azione): ?>
- <?php if ($messaggio): ?>
-    <div class="alert alert-danger text-center fw-bold" style="font-size:1.3em;max-width:600px;margin:30px auto 0;box-shadow:0 2px 8px rgba(200,0,0,0.18);border:2px solid #b71c1c;">
+    <table style="width:100%;border-collapse:collapse;background:#fff;">
+        <thead>
+            <tr style="background:#eee;">
+                <th>Tipologia</th>
+                <th>Periodo</th>
+                <th>Destinazione</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($elenco_noleggi as $n): ?>
+            <tr>
+                <td><?= htmlspecialchars($n['tipologia']) ?></td>
+                <td><?= htmlspecialchars($n['data_inizio']) ?> - <?= htmlspecialchars($n['data_fine']) ?></td>
+                <td><?= htmlspecialchars($n['destinazione'] ?? '') ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<!-- gestisco l'azione -->
+<?php if ($azione): ?>
+    <?php if ($messaggio): ?>
+        <div class="alert alert-danger text-center fw-bold" style="font-size:1.3em;max-width:600px;margin:30px auto 0;box-shadow:0 2px 8px rgba(200,0,0,0.18);border:2px solid #b71c1c;">
         <?= htmlspecialchars($messaggio) ?>
-    </div>
-<?php endif; ?>
+        </div>
+    <?php endif; ?>
     <form method="post">
-        <input type="hidden" name="nuovo_noleggio" value="1">
-        <?php if (isset($_SESSION['cliente_id'])): ?>
-            <input type="hidden" name="cliente_id" value="<?= (int)$_SESSION['cliente_id'] ?>">
-            <div style="margin-bottom:1em;font-weight:bold;">Cliente: <?= htmlspecialchars($pdo->query('SELECT CONCAT(cognome, " ", nome) FROM cliente WHERE id = ' . (int)$_SESSION['cliente_id'])->fetchColumn()) ?></div>
-        <?php else: ?>
-        <label for="cliente_id">Cliente</label>
-        <select name="cliente_id" id="cliente_id" required>
-            <option value="">-- Seleziona cliente --</option>
-            <?php foreach ($clienti as $c): ?>
-                <option value="<?= $c['id'] ?>"><?= htmlspecialchars($c['cognome'] . ' ' . $c['nome']) ?></option>
-            <?php endforeach; ?>
-        </select>
-        <?php endif; ?>
+        <input type="hidden" name="nuovo" value="1">
+<!-- rimosso id_cliente -->
         <label for="tipologia_id">Tipologia</label>
         <select name="tipologia_id" id="tipologia_id" required>
             <option value="">-- Seleziona tipologia --</option>
@@ -167,7 +129,6 @@ if ($id) {
                 <option value="<?= $t['id'] ?>"><?= htmlspecialchars($t['nome']) ?></option>
             <?php endforeach; ?>
         </select>
-        <!-- Automezzo rimosso -->
         <label for="data_inizio">Data Inizio</label>
         <input type="date" name="data_inizio" id="data_inizio" required>
         <label for="data_fine">Data Fine</label>
@@ -177,13 +138,11 @@ if ($id) {
         <label for="accompagnatore">Accompagnatore</label>
         <input type="text" name="accompagnatore" id="accompagnatore" maxlength="100">
         <label style="display:flex;align-items:center;gap:0.5em;margin-top:1em;">
-        <input type="checkbox" name="preventivo" value="1"> Preventivo
-        </label>
+        <input type="checkbox" name="preventivo" value="1"> Preventivo</label>
         <label style="display:flex;align-items:center;gap:0.5em;">
-        <!-- Flag pagato e ivato rimossi -->
-        <button type="submit">Inserisci Noleggio</button>
+        <button type="submit">Salva</button>
     </form>
-    <?php elseif ($id && $noleggio): ?>
+<?php elseif ($id && $noleggio): ?>
     <?php if ($messaggio): ?><div class="msg"><?= $messaggio ?></div><?php endif; ?>
     <form method="post">
         <label for="cliente_id">Cliente</label>
@@ -200,7 +159,6 @@ if ($id) {
                 <option value="<?= $t['id'] ?>" <?= $noleggio['tipologia_noleggio_id']==$t['id'] ? 'selected' : '' ?>><?= htmlspecialchars($t['nome']) ?></option>
             <?php endforeach; ?>
         </select>
-        <!-- Automezzo rimosso -->
         <label for="data_inizio">Data Inizio</label>
         <input type="date" name="data_inizio" id="data_inizio" required value="<?= htmlspecialchars($noleggio['data_inizio']) ?>">
         <label for="data_fine">Data Fine</label>
@@ -213,10 +171,9 @@ if ($id) {
         <input type="checkbox" name="preventivo" value="1" <?= $noleggio['preventivo'] ? 'checked' : '' ?>> Preventivo
         </label>
         <label style="display:flex;align-items:center;gap:0.5em;">
-        <!-- Flag pagato e ivato rimossi -->
-        <button type="submit">Salva Modifiche</button>
+         <button type="submit">Salva Modifiche</button>
     </form>
-    <?php endif; ?>
+<?php endif; ?>
 </div>
 </body>
 </html>
